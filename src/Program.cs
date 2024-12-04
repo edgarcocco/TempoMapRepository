@@ -93,7 +93,9 @@ var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
 using(var scope = scopeFactory.CreateScope())
 {
     await AuthConfig.ConfigAdmin(scope.ServiceProvider);
+    await scope.ServiceProvider.GetRequiredService<AuthDbContext>().Database.MigrateAsync();
 }
+
 
 app.MapControllerRoute(
     name: "default",

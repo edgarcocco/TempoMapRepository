@@ -18,11 +18,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddNewtonsoftJson();
-//trigger a republish
- builder.Configuration.AddAzureKeyVault(
-        new Uri("https://tempomaprepositorykeys.vault.azure.net/"),
-    new DefaultAzureCredential(new DefaultAzureCredentialOptions { ManagedIdentityClientId = "49895597-d8d1-4fdb-be2c-9f866df50b62" }));
-
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
@@ -37,6 +32,17 @@ builder.Services.AddDefaultIdentity<User>(options =>//AddIdentity<User, Identity
     .AddEntityFrameworkStores<AuthDbContext>()
     .AddApiEndpoints()
     .AddDefaultTokenProviders();
+//trigger a republish
+
+if (builder.Environment.EnvironmentName != "SwaggerBuild")
+{
+    builder.Configuration.AddAzureKeyVault(new Uri("https://tempomaprepositorykeys.vault.azure.net/"),
+                                           new DefaultAzureCredential(
+                                           new DefaultAzureCredentialOptions
+                                           {
+                                               ManagedIdentityClientId = "49895597-d8d1-4fdb-be2c-9f866df50b62"
+                                           }));
+}
 
 builder.Services.AddDbContext<AuthDbContext>(options =>
                         options.UseSqlite(builder.Configuration
@@ -78,7 +84,6 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
     app.UseW3CLogging();
-   
 }
 
 if (app.Environment.IsDevelopment())
@@ -95,11 +100,14 @@ app.UseAuthorization();
 app.MapIdentityApi<User>();
 app.MapBlazorHub();
 
-var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
-using(var scope = scopeFactory.CreateScope())
+if (builder.Environment.EnvironmentName != "SwaggerBuild")
 {
-    await scope.ServiceProvider.GetRequiredService<AuthDbContext>().Database.MigrateAsync();
-    //await AuthConfig.ConfigAdmin(scope.ServiceProvider);
+    var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
+    using (var scope = scopeFactory.CreateScope())
+    {
+        await scope.ServiceProvider.GetRequiredService<AuthDbContext>().Database.MigrateAsync();
+        await AuthConfig.ConfigAdmin(scope.ServiceProvider);
+    }
 }
 
 

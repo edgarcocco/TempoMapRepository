@@ -11,8 +11,8 @@ using TempoMapRepository.Data.Context;
 namespace TempoMapRepository.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20241129055549_scaffold_identity")]
-    partial class scaffold_identity
+    [Migration("20241204181105_boot_db")]
+    partial class boot_db
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -161,6 +161,10 @@ namespace TempoMapRepository.Migrations
                     b.Property<byte[]>("CoverImage")
                         .IsRequired()
                         .HasColumnType("BLOB");
+
+                    b.Property<string>("CoverImageFormat")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -340,7 +344,8 @@ namespace TempoMapRepository.Migrations
                 {
                     b.HasOne("TempoMapRepository.Models.Identity.User", "User")
                         .WithMany("Maps")
-                        .HasForeignKey("e.UserId");
+                        .HasForeignKey("e.UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("User");
                 });

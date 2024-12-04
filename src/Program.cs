@@ -92,7 +92,7 @@ app.MapBlazorHub();
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
 using(var scope = scopeFactory.CreateScope())
 {
-    scope.ServiceProvider.GetRequiredService<AuthDbContext>().Database.Migrate();
+    await scope.ServiceProvider.GetRequiredService<AuthDbContext>().Database.MigrateAsync();
     await AuthConfig.ConfigAdmin(scope.ServiceProvider);
 }
 

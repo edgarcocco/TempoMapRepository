@@ -12,11 +12,15 @@ using TempoMapRepository.Policies.Handlers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.HttpLogging;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddNewtonsoftJson();
+ builder.Configuration.AddAzureKeyVault(
+        new Uri("https://tempomaprepositorykeys.vault.azure.net/"),
+    new DefaultAzureCredential(new DefaultAzureCredentialOptions { ManagedIdentityClientId = "49895597-d8d1-4fdb-be2c-9f866df50b62" }));
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
@@ -73,6 +77,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
     app.UseW3CLogging();
+   
 }
 
 if (app.Environment.IsDevelopment())

@@ -1,16 +1,16 @@
-name: Build and deploy .NET Core application to Web App TempoMapRepository20241204004530 with API Management Service TempoMapRepositoryapi-TempoMapRepository
+name: Build and deploy .NET Core application to Web App TempoMapRepository20241204015351 with API Management Service TempoMapRepositoryapi1-TempoMapRepository
 on:
   push:
     branches:
     - master
 env:
-  AZURE_WEBAPP_NAME: TempoMapRepository20241204004530
+  AZURE_WEBAPP_NAME: TempoMapRepository20241204015351
   AZURE_WEBAPP_PACKAGE_PATH: src\publish
   AZURE_APIM_RESOURCE_PATH: /
   AZURE_APIM_RESOURCEGROUP: TempoMapRepository20241204004530ResourceGroup
-  AZURE_APIM_SERVICENAME: TempoMapRepositoryapi
+  AZURE_APIM_SERVICENAME: TempoMapRepositoryapi1
   AZURE_APIM_API_ID: TempoMapRepository
-  AZURE_APIM_APPSERVICEURL: https://tempomaprepository20241204004530.azurewebsites.net
+  AZURE_APIM_APPSERVICEURL: https://tempomaprepository20241204015351.azurewebsites.net
   SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION: 5.6.3
   SWASHBUCKLE_DOTNET_CORE_VERSION: 3.1.x
   API_IMPORT_SPECIFICATION_PATH: src\publish\swagger.json
@@ -62,7 +62,7 @@ jobs:
     - name: Azure Login
       uses: azure/login@v2
       with:
-        creds: ${{ secrets.TempoMapRepositoryapi_SPN }}
+        creds: ${{ secrets.TempoMapRepositoryapi1_SPN }}
     - name: Deploy to Azure WebApp
       uses: azure/webapps-deploy@v2
       with:

@@ -6,16 +6,20 @@ namespace TempoMapRepository.Data.Config
     public static class AuthConfig
     {
 
+        internal static class AdminAccount
+        {
+            public static string Username { get; set; } = "admin";
+            public static string Password { get; set; } = "TenDigitPassword";
+            public static string Role { get; set; } = "Administrator";
+        }
         public static async Task ConfigAdmin(IServiceProvider serviceProvider)
         {
             var configuration = serviceProvider.GetRequiredService<IConfiguration>();
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = serviceProvider.GetService<UserManager<User>>();
-
-            var username = configuration["PrimaryUser:Username"];
-            var password = configuration["PrimaryUser:Password"];
-            var role = configuration["PrimaryUser:Role"];
-
+            var username = AdminAccount.Username;
+            var password = AdminAccount.Password;
+            var role = AdminAccount.Role;
 
             if (await roleManager.FindByNameAsync(role) == null)
             {

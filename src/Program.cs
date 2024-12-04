@@ -88,7 +88,6 @@ app.UseRouting();
 app.UseAuthorization();
 app.MapIdentityApi<User>();
 app.MapBlazorHub();
-app.UseW3CLogging();
 
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
 using(var scope = scopeFactory.CreateScope())

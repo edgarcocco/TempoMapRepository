@@ -1,4 +1,5 @@
-﻿using TempoMapRepository.Models.Identity;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
+using TempoMapRepository.Models.Identity;
 
 namespace TempoMapRepository.Models.Domain
 {
@@ -8,11 +9,12 @@ namespace TempoMapRepository.Models.Domain
         string Name,
         string Description,
         byte[] CoverImage,
+        string CoverImageFormat,
         string Filename,
         DateTime CreatedAt,
         DateTime? UpdatedAt)
     {
-        public Map() : this(0, null, new List<MapDataset>(), "", "", Array.Empty<byte>(), "", DateTime.Now, null)
+        public Map() : this(0, null, new List<MapDataset>(), "", "", Array.Empty<byte>(), "", "", DateTime.Now, DateTime.Now)
         {
         }
     }

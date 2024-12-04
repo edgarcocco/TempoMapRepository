@@ -1,5 +1,9 @@
-﻿@model TempoMapRepository.Models.ViewModel.MapViewModel
-
+﻿@model TempoMapRepository.Models.ViewModel.MapDisplayViewModel
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Authorization
+@using TempoMapRepository.Models.Identity
+@inject IAuthorizationService AuthorizationService
+@inject SignInManager<User> SignInManager
 @{
     ViewData["Title"] = "Details";
 }
@@ -26,7 +30,7 @@
             @Html.DisplayNameFor(model => model.CoverImage)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CoverImage)
+            <img width="32" src="data:@Model.CoverImageFormat;base64,@Model.CoverImage" />
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CreatedAt)
@@ -37,6 +41,11 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    @if (SignInManager.IsSignedIn(User))
+    {
+
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+        <span> | </span>
+    }
+    <a asp-controller="Home" asp-action="Index">Back Index</a>
 </div>

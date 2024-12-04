@@ -1,19 +1,24 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using TempoMapRepository.Data.Context;
 using TempoMapRepository.Models.ViewModel;
 
 namespace TempoMapRepository.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(AuthDbContext _authDbContext, ILogger<HomeController> _logger) : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+       
 
-        public HomeController(ILogger<HomeController> logger)
+        public async Task<IActionResult> Index()
         {
-            _logger = logger;
+              return View(await _authDbContext.Maps
+                                .Include(e => e.User)
+                               .Select(e => new MapDisplayViewModel(e))
+                               .ToListAsync());
         }
 
-        public IActionResult Index()
+        public IActionResult ForgotPassword()
         {
             return View();
         }

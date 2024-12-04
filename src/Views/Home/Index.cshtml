@@ -1,8 +1,35 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using TempoMapRepository.Models.Identity
+@using TempoMapRepository.Views.Shared.Components
+@model IEnumerable<TempoMapRepository.Models.ViewModel.MapDisplayViewModel>
+
+@inject SignInManager<User> SignInManager
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Starting up tempo map repository development!</p>
+<div class="">
+    <div class="text-center my-2">
+        <h2 class="">tempoMap Listing</h2>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <a href="/maps" style="text-decoration: none"><span style="font-size: 16px; ">My Maps Uploaded</span></a> <span>|</span>
+            <a href="/maps/create" style="text-decoration: none"><span style="font-size: 16px;">Submit a new map</span></a>
+        }
+        else{
+            <h4>Want to submit a map? Start by <a href="/identity/account/login">logging in</a></h4>
+        }
+    </div>
+
+    <div class="container">
+        <div class="row gy-3">
+            @foreach (var item in Model)
+            {
+                <div class="col-12 col-md-6">
+                    <component type="typeof(MapCard)" param-Model="item" render-mode="ServerPrerendered" />
+                </div>
+            }
+        </div>
+    </div>
 </div>

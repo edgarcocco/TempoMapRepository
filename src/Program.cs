@@ -4,24 +4,31 @@ using TempoMapRepository.Models.Identity;
 using TempoMapRepository.Controllers;
 using TempoMapRepository.Data.Context;
 using TempoMapRepository.Data.Config;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using TempoMapRepository.Services;
+using Microsoft.AspNetCore.Mvc;
+using TempoMapRepository.Policies.Requirements;
+using TempoMapRepository.Policies.Handlers;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddNewtonsoftJson();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
-builder.Services.AddIdentity<User, IdentityRole>(options =>
+builder.Services.AddDefaultIdentity<User>(options =>//AddIdentity<User, IdentityRole>(options =>
 {
     options.Password.RequiredLength = 10;
     options.Password.RequireDigit = false;
     options.Password.RequireNonAlphanumeric = false;
 })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AuthDbContext>()
+    .AddApiEndpoints()
     .AddDefaultTokenProviders();
 
 builder.Services.AddDbContext<AuthDbContext>(options =>
@@ -30,8 +37,19 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
                     );
 
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
+builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true); 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("IdPolicy", policy => policy.Requirements.Add(new UserIdRequirement()));
+});
+builder.Services.AddSingleton<IAuthorizationHandler, UserIdHandler>();
+
 
 var app = builder.Build();
 
@@ -54,8 +72,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
 app.UseAuthorization();
+app.MapIdentityApi<User>();
+app.MapBlazorHub();
 
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
 using(var scope = scopeFactory.CreateScope())
@@ -66,6 +85,18 @@ using(var scope = scopeFactory.CreateScope())
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
+app.MapPost("/logout", async (SignInManager<User> signInManager,
+    [FromBody] object empty) =>
+{
+    if (empty != null)
+    {
+        await signInManager.SignOutAsync();
+        return Results.Ok();
+    }
+    return Results.Unauthorized();
+})
+.WithOpenApi()
+.RequireAuthorization();
+app.MapRazorPages();
 
 app.Run();

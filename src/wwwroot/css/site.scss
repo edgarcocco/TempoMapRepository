@@ -1,0 +1,32 @@
+﻿@import "../lib/bootstrap/scss/_functions.scss";
+@import "../lib/bootstrap/scss/_variables.scss";
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Major+Mono+Display&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Passion+One:wght@400;700;900&family=Sour+Gummy:ital,wght@0,100..900;1,100..900&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Rampart+One&display=swap');
+
+html {
+  font-size:1.2rem;
+  color: $blue-700;
+}
+ 
+@media (min-width: 768px) {
+  html {
+    font-size: 1rem;
+  }
+}
+
+
+a.navbar-brand {
+    //    font-family: 'Major Mono Display', monospace;
+    font-family: 'Cherry Bomb One', system-ui;
+}
+ 
+html {
+  position: relative;
+  min-height: 100%;
+}
+ 
+body {
+  margin-bottom: 60px;
+  background-color: $white;
+  font-family: 'Cherry Bomb One', system-ui; 
+}

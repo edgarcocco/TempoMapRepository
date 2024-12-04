@@ -1,10 +1,10 @@
-﻿@model IEnumerable<TempoMapRepository.Models.ViewModel.MapViewModel>
+﻿@model IEnumerable<TempoMapRepository.Models.ViewModel.MapDisplayViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "User Maps";
 }
 
-<h1>Index</h1>
+<h1>Maps created by me</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -38,16 +38,16 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                <img src="data:image/png;base64,@Html.DisplayFor(modelItem =>item.CoverImage)" />
+                <img width="32" src="data:image/png;base64,@Html.DisplayFor(modelItem =>item.CoverImage)" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedAt)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </td>
         </tr>
 }
     </tbody>

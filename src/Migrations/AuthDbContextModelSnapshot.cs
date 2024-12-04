@@ -15,7 +15,7 @@ namespace TempoMapRepository.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -92,9 +92,11 @@ namespace TempoMapRepository.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderKey")
+                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderDisplayName")
@@ -132,9 +134,11 @@ namespace TempoMapRepository.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
@@ -154,6 +158,10 @@ namespace TempoMapRepository.Migrations
                     b.Property<byte[]>("CoverImage")
                         .IsRequired()
                         .HasColumnType("BLOB");
+
+                    b.Property<string>("CoverImageFormat")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -333,7 +341,8 @@ namespace TempoMapRepository.Migrations
                 {
                     b.HasOne("TempoMapRepository.Models.Identity.User", "User")
                         .WithMany("Maps")
-                        .HasForeignKey("e.UserId");
+                        .HasForeignKey("e.UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("User");
                 });

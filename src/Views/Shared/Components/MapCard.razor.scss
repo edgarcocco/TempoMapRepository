@@ -1,0 +1,35 @@
+﻿body {
+}
+
+.tempomap-card {
+    font-family: "Passion One", sans-serif;
+    background-color: rgba(255,255,255, 0.9);
+    background-blend-mode: lighten;
+    background-position: center;
+    background-repeat:no-repeat;
+    background-size: cover;
+    z-index: 99;
+
+    div.cover-image {
+        height: 100%;
+        width: 100%;
+    }
+
+    small {
+        font-size: 0.6rem;
+    }
+
+    p {
+        margin: 0px;
+        font-size: 1rem;
+    }
+
+    hr {
+        margin: 0.2rem 0;
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
+    }
+}

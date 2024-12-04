@@ -1,0 +1,25 @@
+﻿@using TempoMapRepository.Models.ViewModel
+
+<div class="border rounded tempomap-card" style="background-image:  url('data:@Model?.CoverImageFormat;base64,@Model?.CoverImage');">
+    <a href="/maps/details/@Model?.Id">
+        <div class="row">
+            <div class="col-3">
+                <div class="cover-image" style="background: no-repeat url('data:@Model?.CoverImageFormat;base64,@Model?.CoverImage'); background-size: cover; z-index: 99">
+                </div>
+            </div>
+            <div class="col" >
+                <header><h3 class="card-title">@Model?.Name</h3></header>
+                <p class="text-info" style="font-size: 0.8rem">mapped by @Model.Username</p>
+                <div class="">
+                    <p class="" style="text-overflow: ellipsis">@Model?.Description</p>
+                </div>
+                <footer class="float-end"><small class="text-info">Created by: @Model.Username at @Model.CreatedAt </small></footer>
+            </div>
+        </div>
+    </a>
+</div>
+
+@code {
+    [Parameter]
+    public MapDisplayViewModel? Model { get; set; }
+}

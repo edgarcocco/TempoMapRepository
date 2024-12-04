@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 using TempoMapRepository.Policies.Requirements;
 using TempoMapRepository.Policies.Handlers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.HttpLogging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +39,19 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
                     );
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddW3CLogging(logging =>
+{
+    // Log all W3C fields
+    logging.LoggingFields = W3CLoggingFields.All;
 
+    logging.AdditionalRequestHeaders.Add("x-forwarded-for");
+    logging.AdditionalRequestHeaders.Add("x-client-ssl-protocol");
+    logging.FileSizeLimit = 5 * 1024 * 1024;
+    logging.RetainedFileCountLimit = 2;
+    logging.FileName = "MyLogFile";
+    logging.LogDirectory = @"logs";
+    logging.FlushInterval = TimeSpan.FromSeconds(2);
+});
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
@@ -74,6 +88,7 @@ app.UseRouting();
 app.UseAuthorization();
 app.MapIdentityApi<User>();
 app.MapBlazorHub();
+app.UseW3CLogging();
 
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
 using(var scope = scopeFactory.CreateScope())

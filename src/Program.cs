@@ -18,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddNewtonsoftJson();
+//trigger a republish
  builder.Configuration.AddAzureKeyVault(
         new Uri("https://tempomaprepositorykeys.vault.azure.net/"),
     new DefaultAzureCredential(new DefaultAzureCredentialOptions { ManagedIdentityClientId = "49895597-d8d1-4fdb-be2c-9f866df50b62" }));

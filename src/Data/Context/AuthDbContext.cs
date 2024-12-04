@@ -10,7 +10,6 @@ namespace TempoMapRepository.Data.Context
         public DbSet<Map> Maps { get; set; } = null!;
         public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
